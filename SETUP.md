@@ -208,12 +208,17 @@ testing-skeleton/
 
 ### Standard Unit Test
 
+`src/utils/math.ts` (The module under test)
+
+```typescript
+export const add = (a: number, b: number) => a + b
+```
+
 `src/utils/math.unit.test.ts` (Runs quickly inside a Node environment)
 
 ```typescript
 import { expect, test } from 'vitest'
-
-const add = (a: number, b: number) => a + b
+import { add } from './math'
 
 test('adds numbers correctly in Node', () => {
   expect(add(2, 3)).toBe(5)
