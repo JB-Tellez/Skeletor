@@ -125,9 +125,15 @@ project with `--project`; note that `--mode` is a *Vite env-file* flag and does
   "preview": "vite preview",
   "test:unit": "vitest --project unit",
   "test:component": "vitest --project browser",
-  "test:e2e": "playwright test"
+  "test:e2e": "playwright test",
+  "test:all": "vitest run --project unit && vitest run --project browser && playwright test"
 }
 ```
+
+`test:all` chains all three suites for a pre-commit or CI check. It spells out
+`vitest run` rather than calling the two Vitest scripts above, because those
+default to watch mode and would never hand control back. The `&&` chain stops at
+the first failure, so a broken unit test skips the slow E2E pass.
 
 ### `playwright.config.ts`
 
@@ -268,6 +274,7 @@ test('should load application homepage successfully', async ({ page }) => {
 npm run test:unit        # Node unit tests only — fast, no browser boot
 npm run test:component   # Browser component tests in Chromium
 npm run test:e2e         # Playwright E2E across chromium, firefox, webkit
+npm run test:all         # All three in sequence, non-watch, stops at first failure
 ```
 
 `test:e2e` starts and stops its own dev server, so it needs no setup — but it
